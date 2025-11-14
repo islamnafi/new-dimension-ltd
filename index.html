@@ -13,7 +13,7 @@
     <div class="container navbar" aria-label="Primary">
       <a class="brand" href="index.html" aria-label="New Dimension Home">
         <span class="logo"><img src="assets/logo.png" alt="Hero Image"></span>
-        <span>New Dimension</span>
+        <span class="brand-name">New Dimension Ltd</span>
       </a>
       <nav>
         <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" data-nav-toggle>☰</button>
@@ -29,44 +29,104 @@
 
   <main id="main-content">
     <!-- HERO SECTION -->
-    <section class="section hero">
-      <div class="container split">
-        <div>
-          <h1 class="headline">Your Trusted Partner in Strategic Procurement &amp; Supply</h1>
-          <p class="subhead">Delivering premium quality vehicles, equipment, and customized solutions to Bangladesh’s leading organizations.</p>
-          <a class="btn accent" href="contact.html" aria-label="Get a quote on Contact page">Get a Quote</a>
+    <section class="section hero hero-modern">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="hero-badge">Strategic Procurement • Since 2023</span>
+          <h1 class="headline">Outfitting Bangladesh’s Critical Missions</h1>
+          <p class="subhead">Mission-ready vehicles, engineered equipment, and bespoke sourcing backed by global partners.</p>
+          <div class="hero-actions">
+            <a class="btn accent" href="contact.html" aria-label="Request a consultation on Contact page">Request a Consultation</a>
+            <a class="btn ghost" href="projects.html" aria-label="View our projects">View Our Projects</a>
+          </div>
+          <dl class="hero-stats">
+            <div>
+              <dt>30+</dt>
+              <dd>Turnkey deployments</dd>
+            </div>
+            <div>
+              <dt>12+</dt>
+              <dd>Government partners</dd>
+            </div>
+            <div>
+              <dt>24/7</dt>
+              <dd>Technical support</dd>
+            </div>
+          </dl>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <img src="assets/hero-image.jpg" alt="Fleet of vehicles placeholder">
+        <div class="hero-visual">
+          <div class="hero-card">
+            <img src="assets/hero-image.jpg" alt="Fleet of vehicles placeholder">
+            <div class="hero-card-overlay">
+              <span>Rapid Delivery</span>
+              <p>Dedicated logistics teams ensure every shipment arrives mission ready.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ABOUT SECTION -->
-    <section class="section alt">
-        <div class="container text-center">
-          <img class="section-icon centered" src="assets/homepage-icons/about-us.png" alt="About Us Image">
-        <p class="eyebrow">About Us</p>
-        <h2 class="kicker">Equipping Bangladesh for Tomorrow</h2>
-        <p class="section-subtitle">Founded in July 2023, New Dimension specializes in the import and supply of critical equipment. We are a trusted partner to military and paramilitary organizations like DGDP, CMTD, and BOF, as well as various government ministries and the private garments sector.</p>
+    <section class="section alt about-spotlight">
+      <div class="container about-spotlight__grid about-spotlight__grid--single">
+        <!-- removed media column -->
+        <!-- <div class="about-spotlight__media">
+          <div class="blob" aria-hidden="true"></div>
+          <img class="about-spotlight__badge" src="assets/homepage-icons/about-us.png" alt="About New Dimension">
+        </div> -->
+        <div class="about-spotlight__copy">
+          <p class="eyebrow">About Us</p>
+          <h2 class="kicker">Equipping Bangladesh for Tomorrow</h2>
+          <p class="section-subtitle">
+            Founded in July 2023, New Dimension specializes in the import and supply of critical equipment. We are a trusted partner to military and paramilitary organizations like DGDP, CMTD, and BOF, as well as various government ministries and the private garments sector.
+          </p>
+          <ul class="feature-list">
+            <li>Trusted vendor to DGDP, CMTD, BOF</li>
+            <li>Engineering, installation, and acceptance</li>
+            <li>Global sourcing with rapid logistics</li>
+          </ul>
+          <div class="cta-row">
+            <a class="btn accent" href="products.html">Explore Products</a>
+            <a class="btn ghost" href="projects.html">See Projects</a>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- MISSION & VISION SECTION -->
-    <section class="section">
-      <div class="container grid-2">
-        <div>
-          <img class="section-icon small-left" src="assets/homepage-icons/our-mission.png" alt="Mission Image">
-          <p class="eyebrow">Our Mission</p>
-          <h3 class="kicker">Dedicated to Client Satisfaction</h3>
-          <p class="muted">Perceiving customer needs at the utmost level by providing them flexibility in sourcing, competitive prices, on-time deliveries, and customised solutions for unique needs.</p>
-        </div>
-        <div>
-          <img class="section-icon small-left" src="assets/homepage-icons/our-vision.png" alt="Vision Image">
-          <p class="eyebrow">Our Vision</p>
-          <h3 class="kicker">To Be the Premier Supplier of Choice</h3>
-          <p class="muted">To provide our clients with competitive and premium quality equipment and services. We are the preeminent independent supplier of choice recognized by our customers as the best in total satisfaction and value.</p>
-        </div>
+    <section class="section values-lively">
+      <div class="container values-lively__grid">
+        <article class="value-card">
+          <div class="value-icon">
+            <img src="assets/homepage-icons/our-mission.png" alt="Mission Image">
+          </div>
+          <div class="value-content">
+            <p class="eyebrow">Our Mission</p>
+            <h3 class="kicker">Dedicated to Client Satisfaction</h3>
+            <p class="muted">Perceiving customer needs at the utmost level by providing flexibility in sourcing, competitive prices, on-time deliveries, and customised solutions for unique needs.</p>
+          </div>
+          <ul class="pill-list">
+            <li>Flexible sourcing</li>
+            <li>On-time delivery</li>
+            <li>Custom solutions</li>
+          </ul>
+        </article>
+
+        <article class="value-card">
+          <div class="value-icon">
+            <img src="assets/homepage-icons/our-vision.png" alt="Vision Image">
+          </div>
+          <div class="value-content">
+            <p class="eyebrow">Our Vision</p>
+            <h3 class="kicker">To Be the Premier Supplier of Choice</h3>
+            <p class="muted">Provide competitive, premium-quality equipment and services—recognized by customers as the best in total satisfaction and value.</p>
+          </div>
+          <ul class="pill-list">
+            <li>Premium equipment</li>
+            <li>Measurable value</li>
+            <li>National impact</li>
+          </ul>
+        </article>
       </div>
     </section>
 
@@ -202,5 +262,7 @@
   </footer>
 
   <script src="script.js" defer></script>
+</body>
+</html>
 
 
