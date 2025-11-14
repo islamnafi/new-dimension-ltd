@@ -100,6 +100,11 @@ button, input, select, textarea {
   padding: 72px 0;
 }
 
+/* Utility: reduced vertical spacing for compact sections (used for clients marquee) */
+.section--tight {
+  padding: 28px 0;
+}
+
 .section.alt {
   background: var(--color-bg-alt);
 }
@@ -202,22 +207,25 @@ button, input, select, textarea {
 
 .brand-name {
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: clamp(18px, 1.8vw, 22px);
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 300; /* lighter weight as requested */
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #0A2342;
 }
 
 .brand-name::before {
-  content: "";
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ffd56a, #2c67b3);
-  box-shadow: 0 0 12px rgba(44, 103, 179, 0.4);
+  /* removed decorative symbol; keep pseudo-element suppressed */
+  display: none;
+  content: none;
+}
+
+.brand-line {
+  line-height: 1;
+  display: block;
 }
 
 .nav-links {
@@ -266,7 +274,8 @@ button, input, select, textarea {
 
 /* Hero */
 .hero {
-  padding: 64px 0 48px;
+  /* Reduced vertical padding by ~40% to tighten space under the header */
+  padding: 38px 0 28px;
 }
 
 .hero .headline {
@@ -290,7 +299,8 @@ button, input, select, textarea {
 
 .section.hero.hero-modern {
   position: relative;
-  padding-block: clamp(80px, 12vw, 160px);
+  /* Reduce the block padding by ~40% (clamp values scaled) so header-to-hero gap is smaller */
+  padding-block: clamp(48px, 7.2vw, 96px);
   background: radial-gradient(circle at top right, rgba(44,103,179,0.18), transparent 55%), linear-gradient(135deg, rgba(10,35,66,0.94), rgba(10,35,66,0.75));
   color: #f5f7fb;
   overflow: hidden;
@@ -346,12 +356,25 @@ button, input, select, textarea {
 }
 
 .btn.ghost {
+  /* Default ghost style for light backgrounds */
+  border: 1px solid rgba(10,35,66,0.12);
+  color: var(--color-primary);
+  background: transparent;
+}
+
+.btn.ghost:hover {
+  border-color: rgba(10,35,66,0.18);
+  background: rgba(10,35,66,0.04);
+}
+
+/* Inverse ghost style when used on dark hero background */
+.hero .btn.ghost {
   border: 1px solid rgba(255,255,255,0.35);
   color: #fff;
   background: transparent;
 }
 
-.btn.ghost:hover {
+.hero .btn.ghost:hover {
   border-color: rgba(255,255,255,0.65);
   background: rgba(255,255,255,0.08);
 }
@@ -471,6 +494,21 @@ textarea {
   font-family: var(--font-base);
   font-weight: 400;
   letter-spacing: 0.01em;
+}
+
+/* Recent Works: force consistent, shorter image heights */
+.grid-2 .card img {
+  width: 100%;
+  height: clamp(110px, 18vw, 180px); /* shorter, responsive */
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+}
+
+@media (max-width: 640px) {
+  .grid-2 .card img {
+    height: 120px;
+  }
 }
 
 /* Slideshow */
@@ -654,13 +692,15 @@ textarea { min-height: 120px; resize: vertical; }
 
 /* Vibrant About "Spotlight" */
 .about-spotlight .container {
-  max-width: 1100px;
+  /* Match site container width so About section aligns with other page sections */
+  max-width: var(--container-max);
 }
 
 .about-spotlight__grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(280px, 420px) 1fr;
+  /* Make the content column flexible on the left and the media column fixed on the right */
+  grid-template-columns: 1fr minmax(280px, 420px);
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
   padding: clamp(1.6rem, 4vw, 2.4rem);
@@ -768,13 +808,12 @@ textarea { min-height: 120px; resize: vertical; }
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 0.9rem;
-  padding: clamp(1.1rem, 3vw, 1.6rem);
-  border-radius: 18px;
-  background:
-    linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(135deg, #0A2342, #2C67B3 60%, #D9A404) border-box;
-  border: 2px solid transparent;
-  box-shadow: 0 24px 48px -30px rgba(10, 35, 66, 0.45);
+  /* Make each value card match the About spotlight card look */
+  padding: clamp(1.6rem, 4vw, 2.4rem);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+  border: 1px solid rgba(10, 35, 66, 0.08);
+  box-shadow: 0 30px 60px -35px rgba(10, 35, 66, 0.35);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 

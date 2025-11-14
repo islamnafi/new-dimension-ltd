@@ -48,12 +48,22 @@
       track.innerHTML = original + original + original; // 3x
       var speed = Number(host.getAttribute('data-speed')) || 50; // px/s
       var pos = 0;
+      var paused = false;
+      // Pause on hover, focus, or touch
+      host.addEventListener('mouseenter', function () { paused = true; });
+      host.addEventListener('mouseleave', function () { paused = false; });
+      host.addEventListener('focusin', function () { paused = true; });
+      host.addEventListener('focusout', function () { paused = false; });
+      host.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+      host.addEventListener('touchend', function () { paused = false; });
       function step(ts) {
-        pos -= speed / 60; // approx 60fps
-        // Reset when scrolled past one third (since we tripled)
-        var segmentWidth = track.scrollWidth / 3;
-        if (-pos >= segmentWidth) pos = 0;
-        track.style.transform = 'translateX(' + pos + 'px)';
+        if (!paused) {
+          pos -= speed / 60; // approx 60fps
+          // Reset when scrolled past one third (since we tripled)
+          var segmentWidth = track.scrollWidth / 3;
+          if (-pos >= segmentWidth) pos = 0;
+          track.style.transform = 'translateX(' + pos + 'px)';
+        }
         requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
