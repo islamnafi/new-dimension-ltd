@@ -1,141 +1,150 @@
 // New Dimension - Shared JavaScript (No frameworks)
 // Features: Mobile menu, Slideshow, Marquee, Tabs, Form validation
 
-(function () {
-  function qs(selector, scope) { return (scope || document).querySelector(selector); }
-  function qsa(selector, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(selector)); }
+(() => {
+  'use strict';
 
-  // Mobile Menu Toggle
-  var hamburger = qs('[data-nav-toggle]');
-  var navLinks = qs('[data-nav]');
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', function () {
-      var isOpen = navLinks.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-    });
-    // Close on link click (mobile)
-    qsa('a', navLinks).forEach(function (a) {
-      a.addEventListener('click', function () {
-        navLinks.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      });
-    });
-  }
-
-  // Slideshow (fading)
-  function initSlideshows() {
-    qsa('[data-slideshow]')
-      .forEach(function (host) {
-        var slides = qsa('.slide', host);
-        if (!slides.length) return;
-        var idx = 0;
-        slides[0].classList.add('active');
-        setInterval(function () {
-          slides[idx].classList.remove('active');
-          idx = (idx + 1) % slides.length;
-          slides[idx].classList.add('active');
-        }, 3500);
-      });
-  }
-
-  // Marquee (infinite scroll of text)
-  function initMarquees() {
-    qsa('[data-marquee]').forEach(function (host) {
-      var track = qs('.marquee-track', host);
-      if (!track) return;
-      // Duplicate content multiple times to ensure seamless loop with logos
-      var original = track.innerHTML;
-      track.innerHTML = original + original + original; // 3x
-      var speed = Number(host.getAttribute('data-speed')) || 50; // px/s
-      var pos = 0;
-      var paused = false;
-      // Pause on hover, focus, or touch
-      host.addEventListener('mouseenter', function () { paused = true; });
-      host.addEventListener('mouseleave', function () { paused = false; });
-      host.addEventListener('focusin', function () { paused = true; });
-      host.addEventListener('focusout', function () { paused = false; });
-      host.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-      host.addEventListener('touchend', function () { paused = false; });
-      function step(ts) {
-        if (!paused) {
-          pos -= speed / 60; // approx 60fps
-          // Reset when scrolled past one third (since we tripled)
-          var segmentWidth = track.scrollWidth / 3;
-          if (-pos >= segmentWidth) pos = 0;
-          track.style.transform = 'translateX(' + pos + 'px)';
-        }
-        requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }
-
-  // Tabs (Projects)
-  function initTabs() {
-    qsa('[data-tabs]').forEach(function (tabs) {
-      var tabList = qs('[role="tablist"]', tabs);
-      var buttons = qsa('[role="tab"]', tabList);
-      var panels = qsa('[role="tabpanel"]', tabs);
-      function selectTab(id) {
-        buttons.forEach(function (b) {
-          var selected = b.getAttribute('aria-controls') === id;
-          b.setAttribute('aria-selected', String(selected));
-          b.tabIndex = selected ? 0 : -1;
-        });
-        panels.forEach(function (p) {
-          p.hidden = p.id !== id;
-        });
-      }
-      buttons.forEach(function (b, i) {
-        b.addEventListener('click', function () { selectTab(b.getAttribute('aria-controls')); });
-        b.addEventListener('keydown', function (e) {
-          var current = buttons.findIndex(function (x) { return x.getAttribute('aria-selected') === 'true'; });
-          if (e.key === 'ArrowRight') { buttons[(current + 1) % buttons.length].focus(); }
-          if (e.key === 'ArrowLeft') { buttons[(current - 1 + buttons.length) % buttons.length].focus(); }
-        });
-        if (i === 0) selectTab(b.getAttribute('aria-controls'));
-      });
-    });
-  }
-
-  // Contact Form Validation (client-side only)
-  function initForms() {
-    qsa('form[data-validate]')
-      .forEach(function (form) {
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          var required = qsa('[data-required]', form);
-          var valid = true;
-          required.forEach(function (el) {
-            var value = (el.value || '').trim();
-            if (!value) { valid = false; el.setAttribute('aria-invalid', 'true'); }
-            else { el.removeAttribute('aria-invalid'); }
-          });
-          var email = qs('input[type="email"]', form);
-          if (email) {
-            var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-            if (!ok) { valid = false; email.setAttribute('aria-invalid', 'true'); }
-          }
-          if (!valid) {
-            alert('Please fill in all required fields correctly.');
-            return;
-          }
-          alert('Thank you! Your message has been submitted.');
-          form.reset();
-        });
-      });
-  }
-
-  // Init on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', onReady);
-  } else { onReady(); }
-
-  function onReady() {
+  document.addEventListener('DOMContentLoaded', () => {
+    initNavToggle();
     initSlideshows();
     initMarquees();
-    initTabs();
-    initForms();
+  });
+
+  function initNavToggle() {
+    const btn = document.querySelector('[data-nav-toggle]');
+    const nav = document.querySelector('[data-nav]');
+    if (!btn || !nav) return;
+
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      nav.classList.toggle('is-open', !open);
+    });
+  }
+
+  function initSlideshows() {
+    document.querySelectorAll('[data-slideshow]').forEach((root) => {
+      if (root.dataset.slideshowInit === '1') return;
+      root.dataset.slideshowInit = '1';
+
+      const slides = Array.from(root.querySelectorAll('.slide'));
+      if (slides.length < 2) return;
+
+      const ACTIVE = 'active';
+      let index = Math.max(0, slides.findIndex(s => s.classList.contains(ACTIVE)));
+      if (index < 0) index = 0;
+
+      const intervalMs = parseInt(root.getAttribute('data-interval') || '5000', 10);
+      let timer = null;
+
+      function show(n) {
+        slides[index]?.classList.remove(ACTIVE);
+        index = (n + slides.length) % slides.length;
+        slides[index]?.classList.add(ACTIVE);
+      }
+
+      function next() { show(index + 1); }
+      function prev() { show(index - 1); }
+
+      function start() {
+        if (timer) return;
+        timer = setInterval(next, intervalMs);
+      }
+
+      function stop() {
+        if (!timer) return;
+        clearInterval(timer);
+        timer = null;
+      }
+
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.querySelector('.slide-next')?.addEventListener('click', () => { stop(); next(); });
+      root.querySelector('.slide-prev')?.addEventListener('click', () => { stop(); prev(); });
+
+      // Ensure one active at start
+      slides.forEach((s, i) => s.classList.toggle(ACTIVE, i === index));
+      start();
+    });
+  }
+
+  function initMarquees() {
+    document.querySelectorAll('[data-marquee]').forEach((container) => {
+      if (container.dataset.marqueeInit === '1') return;
+      container.dataset.marqueeInit = '1';
+
+      const speed = parseFloat(container.getAttribute('data-speed') || '60'); // px/s
+      const track = container.querySelector('.marquee-track') || container.firstElementChild;
+      if (!track) return;
+
+      // Duplicate content for seamless loop
+      const segmentHTML = track.innerHTML;
+      track.innerHTML = segmentHTML + segmentHTML;
+
+      // Wait for images (so widths are correct)
+      const imgs = Array.from(track.querySelectorAll('img'));
+      let loaded = 0;
+      const done = () => startScroll(container, track, speed);
+
+      if (imgs.length === 0) {
+        done();
+      } else {
+        const mark = () => { loaded++; if (loaded === imgs.length) done(); };
+        imgs.forEach(img => {
+          if (img.complete) return mark();
+          img.addEventListener('load', mark, { once: true });
+          img.addEventListener('error', mark, { once: true });
+        });
+      }
+    });
+
+    function startScroll(container, track, speed) {
+      let children = Array.from(track.children);
+      if (children.length === 0) return;
+
+      // Width of the first half (one full segment)
+      const half = Math.floor(children.length / 2);
+      let segmentWidth = 0;
+      for (let i = 0; i < half; i++) {
+        segmentWidth += children[i].getBoundingClientRect().width;
+      }
+
+      // Fallback if zero (avoid divide-by-zero)
+      if (segmentWidth <= 0) segmentWidth = track.scrollWidth / 2;
+
+      let x = 0;
+      let last = performance.now();
+      let paused = false;
+      let rafId = 0;
+
+      const frame = (now) => {
+        const dt = (now - last) / 1000;
+        last = now;
+
+        if (!paused) {
+          x -= speed * dt;
+          if (-x >= segmentWidth) x += segmentWidth;
+          track.style.transform = `translateX(${x}px)`;
+        }
+        rafId = requestAnimationFrame(frame);
+      };
+
+      container.addEventListener('mouseenter', () => { paused = true; });
+      container.addEventListener('mouseleave', () => { paused = false; });
+
+      window.addEventListener('resize', () => {
+        // Recompute segment width on resize
+        children = Array.from(track.children);
+        let w = 0;
+        for (let i = 0; i < half; i++) {
+          w += children[i].getBoundingClientRect().width;
+        }
+        segmentWidth = w || track.scrollWidth / 2;
+      });
+
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(frame);
+    }
   }
 })();
 

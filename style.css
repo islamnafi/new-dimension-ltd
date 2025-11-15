@@ -299,9 +299,9 @@ button, input, select, textarea {
 
 .section.hero.hero-modern {
   position: relative;
-  /* Reduce the block padding by ~40% (clamp values scaled) so header-to-hero gap is smaller */
   padding-block: clamp(48px, 7.2vw, 96px);
-  background: radial-gradient(circle at top right, rgba(44,103,179,0.18), transparent 55%), linear-gradient(135deg, rgba(10,35,66,0.94), rgba(10,35,66,0.75));
+  /* remove old background so image can show */
+  /* background: radial-gradient(circle at top right, rgba(44,103,179,0.18), transparent 55%), linear-gradient(135deg, rgba(10,35,66,0.94), rgba(10,35,66,0.75)); */
   color: #f5f7fb;
   overflow: hidden;
 }
@@ -496,14 +496,23 @@ textarea {
   letter-spacing: 0.01em;
 }
 
-/* Recent Works: force consistent, shorter image heights */
-.grid-2 .card img {
-  width: 100%;
-  height: clamp(110px, 18vw, 180px); /* shorter, responsive */
-  object-fit: cover;
-  display: block;
-  border-radius: 6px;
+/* Recent Works: make card images fill without letterboxing */
+.grid-2 .card {
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
 }
+.grid-2 .card > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* pick 16/9 or 4/3 to taste */
+  height: auto;           /* height is derived from aspect-ratio */
+  object-fit: cover;      /* crop to fill, no blank bars */
+}
+
+/* If you prefer a fixed height instead of aspect-ratio, use this instead:
+.grid-2 .card > img { width:100%; height:220px; object-fit:cover; display:block; }
+*/
 
 @media (max-width: 640px) {
   .grid-2 .card img {
@@ -514,20 +523,87 @@ textarea {
 /* Slideshow */
 .slideshow {
   position: relative;
-  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  height: 320px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
 }
 
-.slide {
+.slideshow > .slide {
+  display: none !important;      /* hide all by default */
+  position: static !important;   /* not absolute -> container keeps height */
+  width: 100%;
+  height: auto !important;       /* keep natural aspect ratio */
+  object-fit: cover;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.slideshow > .slide.active {
+  display: block !important;     /* only active shows */
+}
+
+/* About block specific styling */
+.about-spotlight__media .slideshow--about {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;       /* ensures height so absolutely positioned slides are visible */
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+.about-spotlight__media .slideshow--about img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Keep the blob behind the slideshow, if positioned */
+.about-spotlight__media {
+  position: relative;
+}
+.about-spotlight__media .blob {
+  position: absolute;
+  inset: -10% -10% auto auto;
+  z-index: 0;
+}
+.about-spotlight__media .slideshow--about {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;       /* ensures height so absolutely positioned slides are visible */
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+
+/* About slideshow sizing */
+.about-spotlight__media .slideshow--about {
+  aspect-ratio: 16 / 9; /* adjust if you prefer 4/3 */
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* Force slides to cover the whole area (override global img rules) */
+.slideshow > .slide {
   position: absolute;
   inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
   opacity: 0;
-  transition: opacity 600ms ease;
+  visibility: hidden;
+  transition: opacity 400ms ease;
 }
-
-.slide.active { opacity: 1; }
+.slideshow > .slide.active {
+  opacity: 1;
+  visibility: visible;
+}
 
 /* Marquee */
 .marquee {
@@ -723,11 +799,37 @@ textarea { min-height: 120px; resize: vertical; }
   border: 1px solid rgba(10, 35, 66, 0.08);
 }
 
+/* Do not show the gradient blob behind the About image */
 .about-spotlight__media .blob {
+  display: none;           /* simplest: hide it */
+  /* Alternatively:
+  z-index: -1;
+  pointer-events: none;
+  */
+}
+
+/* Ensure the slideshow itself fills the box with no bands */
+.about-spotlight__media { padding: 0; }
+.about-spotlight__media .slideshow--about {
+  margin: 0;
+  padding: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.about-spotlight__media .slideshow--about > .slide {
   position: absolute;
-  inset: -20%;
-  background: radial-gradient(closest-side, rgba(44, 103, 179, 0.22), transparent 70%);
-  filter: blur(10px);
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 400ms ease;
+}
+.about-spotlight__media .slideshow--about > .slide.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 .about-spotlight__badge {
@@ -871,3 +973,116 @@ textarea { min-height: 120px; resize: vertical; }
 }
 
 
+.hero-badge-font {
+  font-family: var(--font-base);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero.hero-has-bg {
+  position: relative;
+  background: url("/assets/hero-image.jpg") center/cover no-repeat;
+  color: #fff;
+}
+
+.hero.hero-has-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10,35,66,0.55); /* dark overlay for readability */
+}
+
+.hero.hero-has-bg .hero-grid,
+.hero.hero-has-bg .hero-copy {
+  position: relative;
+  z-index: 1;
+}
+
+/* Increase specificity so it beats the earlier hero-modern rule */
+.section.hero.hero-modern.hero-has-bg {
+  position: relative;
+  background: url("assets/hero-image.jpg") center/cover no-repeat;
+  color: #fff;
+  min-height: 520px; /* optional */
+}
+
+.section.hero.hero-modern.hero-has-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10,35,66,0.55);
+}
+
+.section.hero.hero-modern.hero-has-bg .hero-grid,
+.section.hero.hero-modern.hero-has-bg .hero-copy {
+  position: relative;
+  z-index: 1;
+}
+
+/* Remove inner spacing and make the slide fully cover */
+.about-spotlight__media { padding: 0 !important; }
+.about-spotlight__media .slideshow--about {
+  display: block;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0;          /* kill inline gaps */
+  aspect-ratio: 16 / 9;    /* keep a fixed box */
+  border-radius: 18px;
+  overflow: hidden;
+}
+.about-spotlight__media .slideshow--about > .slide {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;       /* fill without bars */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 400ms ease;
+}
+.about-spotlight__media .slideshow--about > .slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* About image container: no gradient, pure white */
+.about-spotlight__media .blob { display: none !important; }
+.about-spotlight__media,
+.about-spotlight__media .slideshow--about { background:#fff !important; }
+
+/* Make the image fill the box */
+.about-spotlight__media .slideshow--about {
+  position: relative;
+  aspect-ratio: 16 / 9;   /* set the box size */
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.about-spotlight__media .slideshow--about > .slide {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;       /* fills with crop, no empty bands */
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease;
+}
+.about-spotlight__media .slideshow--about > .slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* About slideshow should look exactly like the Products slider */
+.about-spotlight__media .slideshow {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  aspect-ratio: auto !important;
+  max-width: 100%;
+}
+/* If a blob/gradient class still exists somewhere, keep it hidden */
+.about-spotlight__media .blob { display: none !important; }
