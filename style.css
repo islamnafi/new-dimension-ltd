@@ -168,6 +168,19 @@ button, input, select, textarea {
   line-height: 1.25;
 }
 
+/* Gradient text for all kicker headings */
+.kicker {
+  background: linear-gradient(90deg, #0A2342 0%, #2C67B3 60%, #2C67B3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Optional stronger weight if needed */
+.kicker {
+  font-weight: 600;
+}
+
 /* Header (Sticky Nav) */
 .site-header {
   position: sticky;
@@ -931,27 +944,49 @@ textarea { min-height: 120px; resize: vertical; }
   filter: drop-shadow(0 10px 16px rgba(10, 35, 66, 0.25));
 }
 
+/* Value card icon sizing */
+.value-card .value-icon img {
+  width: 40px; /* reduce from original (adjust as needed) */
+  height: auto;
+  display: block;
+}
+
+/* Optional: center + spacing tweak */
+.value-card .value-icon {
+  width: 40px;
+  flex: 0 0 auto;
+}
+
 .value-content {
   display: grid;
   gap: 0.55rem;
 }
 
 .pill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.2rem 0 0 0;
-  padding: 0;
-  list-style: none;
+  gap: 8px;
 }
 
 .pill-list li {
-  padding: 0.35rem 0.6rem;
-  font-size: 0.8rem;
-  border-radius: 999px;
-  background: rgba(44, 103, 179, 0.08);
-  color: #0A2342;
-  border: 1px solid rgba(44, 103, 179, 0.18);
+  background: #2C67B3; /* brand blue (change to #0A2342 if you prefer the darker) */
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 14px;
+  line-height: 1.2;
+  border-radius: 10px; /* was very round; reduce from e.g. 9999px */
+  border: 1px solid rgba(255,255,255,0.15);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.pill-list li:hover {
+  background: #0A2342; /* optional hover: darker blue */
+  border-color: rgba(255,255,255,0.25);
 }
 
 /* Responsive */
@@ -1086,3 +1121,46 @@ textarea { min-height: 120px; resize: vertical; }
 }
 /* If a blob/gradient class still exists somewhere, keep it hidden */
 .about-spotlight__media .blob { display: none !important; }
+
+/* Large decorative quotation marks (realigned) */
+.big-quote {
+  position: relative;
+  display: block;
+  padding: 34px 42px;              /* inner space so quotes sit outside text block */
+  margin: 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.big-quote::before,
+.big-quote::after {
+  position: absolute;
+  font-size: 86px;                 /* larger for visual framing */
+  line-height: 1;
+  font-weight: 700;
+  color: #2C67B3;
+  opacity: 0.13;
+  pointer-events: none;
+  user-select: none;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.big-quote::before {
+  content: "“";
+  top: 0;
+  left: 10px;
+  transform: translate(-6px, -18px); /* nudge upward/left */
+}
+
+.big-quote::after {
+  content: "”";
+  bottom: 0;
+  right: 14px;
+  transform: translate(6px, 18px);   /* nudge downward/right */
+}
+
+/* Optional tighter version (use instead if you want less padding)
+.big-quote { padding: 26px 34px; }
+.big-quote::before { font-size:72px; transform:translate(-4px,-14px); }
+.big-quote::after  { font-size:72px; transform:translate(4px,14px); }
+*/
