@@ -33,7 +33,7 @@
 
   <main id="main-content">
     <!-- Header -->
-    <section class="section alt">
+    <section class="section alt gradient-header">
       <div class="container">
         <h1 class="section-title">Our Project Portfolio</h1>
         <p class="section-subtitle">We have a proven track record of successfully executing and managing contracts for key government and commercial clients.</p>
@@ -46,33 +46,182 @@
         <div class="tabs" data-tabs>
           <div class="tab-list" role="tablist" aria-label="Project categories">
             <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-ongoing" id="tab-ongoing">Ongoing Contracts</button>
+            <button class="tab-button" role="tab" aria-selected="true" aria-controls="panel-completed" id="tab-completed">Completed Contracts</button>
             <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-future" id="tab-future">Future Contracts</button>
-            <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-completed" id="tab-completed">Completed Contracts</button>
           </div>
 
           <div class="tab-panels">
-            <section class="tab-panel" role="tabpanel" id="panel-ongoing" aria-labelledby="tab-ongoing" tabindex="0">
-              <ul class="list">
-                <li>Establishment of Digital Chrome Plating Plant, BOF</li>
-                <li>Digital Pendulum Impact Tester, BOF</li>
-                <li>Digital Universal Tensile Testing Machine, BOF</li>
-                <li>Road Mining Machine (R&amp;H)</li>
-                <li>Spare Parts (Renewal Vehicle) Bangladesh Army</li>
-              </ul>
+            <section class="tab-panel" role="tabpanel" id="panel-ongoing" aria-labelledby="tab-ongoing" tabindex="0" hidden>
+              <div class="contracts-grid">
+                <article class="contract-card">
+                  <h4>Establishment of Digital Chrome Plating Plant</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: BOF</span>
+                  </div>
+                  <p class="contract-desc">Turnkey setup of a modern chrome plating line including installation, calibration, and acceptance.</p>
+                </article>
+                <article class="contract-card">
+                  <h4>Digital Pendulum Impact Tester</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: BOF</span>
+                  </div>
+                  <p class="contract-desc">Supply and commissioning of precision impact testing equipment for materials QA.</p>
+                </article>
+                <article class="contract-card">
+                  <h4>Digital Universal Tensile Testing Machine</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: BOF</span>
+                  </div>
+                  <p class="contract-desc">Comprehensive tensile testing solution with fixtures and training.</p>
+                </article>
+                <article class="contract-card">
+                  <h4>Road Mining Machine</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: R&amp;H</span>
+                  </div>
+                  <p class="contract-desc">Heavy-duty equipment for excavation and road works including after-sales support.</p>
+                </article>
+                <article class="contract-card">
+                  <h4>Spare Parts (Renewal Vehicle)</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: Bangladesh Army</span>
+                  </div>
+                  <p class="contract-desc">Framework supply of OEM/compatible components with logistics and warranty handling.</p>
+                </article>
+              </div>
             </section>
+
+            <section class="tab-panel" role="tabpanel" id="panel-completed" aria-labelledby="tab-completed" tabindex="0">
+  <div class="contracts-grid">
+
+    <!-- PWD-01 -->
+    <article class="contract-card">
+      <h4>Lift & Electrical System Refurbishment</h4>
+      <div class="contract-tags" aria-label="Contract tags">
+        <span class="tag tag--id">ID: 1091731</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Replacement of cables, switches, busbars, boards, wiring, and associated repairs for the existing lift system at the National Institute of Neuroscience & Hospital, Dhaka.
+      </p>
+    </article>
+
+    <!-- PWD-02 -->
+    <article class="contract-card">
+      <h4>Conference & PA System Installation</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1122953</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Supply and installation of a complete conference and PA system with ancillary works at the Senior Secretary’s Conference Room, National Parliament Bhaban.
+      </p>
+    </article>
+
+    <!-- PWD-03 -->
+    <article class="contract-card">
+      <h4>Fire Safety Equipment & Electrical Repairs</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1101353</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Replacement/repair of damaged fire extinguishers and electrical works across key wards and blocks at the National Institute of Neuroscience & Hospital.
+      </p>
+    </article>
+
+    <!-- PWD-04 -->
+    <article class="contract-card">
+      <h4>Generator Servicing & Spare Parts Replacement</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1100780</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Servicing and replacement of spare parts for 300 KVA (3 units), 250 KVA (2 units), and 200 KVA (1 unit) generators at NINS.
+      </p>
+    </article>
+
+    <!-- PWD-05 -->
+    <article class="contract-card">
+      <h4>Electrical Repairs at National Parliament</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1148168</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Repair and replacement of fittings, cables, sockets, and electrical components across multiple levels and offices of National Parliament.
+      </p>
+    </article>
+
+    <!-- PWD-06 -->
+    <article class="contract-card">
+      <h4>Replacement of Globe Lights</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1147456</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        Replacement of worn-out glass globe lights at Secretary Block (Level 3) and the North-West Block of National Parliament.
+      </p>
+    </article>
+
+    <!-- PWD-07 -->
+    <article class="contract-card">
+      <h4>AC Servicing & Electrical Works (Gazipur)</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1035979</span>
+        <span class="tag tag--client">Client: PWD</span>
+      </div>
+      <p class="contract-desc">
+        AC servicing, gas charging, and replacement of copper pipes, control boards, wiring, and control circuits at the Superintendent of Police Office, Gazipur.
+      </p>
+    </article>
+
+    <!-- R&H-01 -->
+    <article class="contract-card">
+      <h4>Supply of Spare Parts for Heavy Equipment</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: 1154423</span>
+        <span class="tag tag--client">Client: R&H</span>
+      </div>
+      <p class="contract-desc">
+        Supply of spare parts for payloaders and heavy equipment under Road Division, Dinajpur for the fiscal year 2024–2025.
+      </p>
+    </article>
+
+    <!-- BOGURA-01 -->
+    <article class="contract-card">
+      <h4>Fully Automatic Thermoplastic Road Marking Machine</h4>
+      <div class="contract-tags">
+        <span class="tag tag--id">ID: Not Provided</span>
+        <span class="tag tag--client">Client: Bogura</span>
+      </div>
+      <p class="contract-desc">
+        Supply of a fully automatic thermoplastic road marking machine for regional infrastructure development.
+      </p>
+    </article>
+
+  </div>
+</section>
+
 
             <section class="tab-panel" role="tabpanel" id="panel-future" aria-labelledby="tab-future" tabindex="0" hidden>
-              <ul class="list">
-                <li>Aerial Ladder Fire Truck, DGDP (Air Force)</li>
-              </ul>
-            </section>
-
-            <section class="tab-panel" role="tabpanel" id="panel-completed" aria-labelledby="tab-completed" tabindex="0" hidden>
-              <ul class="list">
-                <li>Supply of Road Marking Machine</li>
-                <li>Supply of Spare Parts (Renault, Isuzu, Toyota, Nissan, Mitsubishi)</li>
-                <li>Supply of Garments Accessories</li>
-              </ul>
+              <div class="contracts-grid">
+                <article class="contract-card">
+                  <h4>Aerial Ladder Fire Truck</h4>
+                  <div class="contract-tags" aria-label="Contract tags">
+                    <span class="tag tag--id">ID: TBD</span>
+                    <span class="tag tag--client">Client: DGDP (Air Force)</span>
+                  </div>
+                  <p class="contract-desc">High-reach firefighting platform planned with training and after-sales service.</p>
+                </article>
+              </div>
             </section>
           </div>
         </div>

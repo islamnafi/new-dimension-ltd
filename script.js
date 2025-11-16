@@ -8,6 +8,7 @@
     initNavToggle();
     initSlideshows();
     initMarquees();
+    initTabs();
   });
 
   function initNavToggle() {
@@ -102,15 +103,17 @@
       let children = Array.from(track.children);
       if (children.length === 0) return;
 
-      // Width of the first half (one full segment)
+      // Width of the original (first) segment = half of duplicated track width
+      // Using scrollWidth accounts for flex gap spacing so we avoid a jump.
       const half = Math.floor(children.length / 2);
-      let segmentWidth = 0;
-      for (let i = 0; i < half; i++) {
-        segmentWidth += children[i].getBoundingClientRect().width;
+      let segmentWidth = track.scrollWidth / 2;
+      if (segmentWidth <= 0) {
+        // Fallback: sum child widths including gap approximation
+        segmentWidth = 0;
+        for (let i = 0; i < half; i++) {
+          segmentWidth += children[i].getBoundingClientRect().width;
+        }
       }
-
-      // Fallback if zero (avoid divide-by-zero)
-      if (segmentWidth <= 0) segmentWidth = track.scrollWidth / 2;
 
       let x = 0;
       let last = performance.now();
@@ -133,18 +136,82 @@
       container.addEventListener('mouseleave', () => { paused = false; });
 
       window.addEventListener('resize', () => {
-        // Recompute segment width on resize
-        children = Array.from(track.children);
-        let w = 0;
-        for (let i = 0; i < half; i++) {
-          w += children[i].getBoundingClientRect().width;
+        // Recompute segment width on resize using scrollWidth to include gaps
+        segmentWidth = track.scrollWidth / 2;
+        if (segmentWidth <= 0) {
+          children = Array.from(track.children);
+          let w = 0;
+            for (let i = 0; i < half; i++) {
+              w += children[i].getBoundingClientRect().width;
+            }
+          segmentWidth = w || 1; // avoid zero
         }
-        segmentWidth = w || track.scrollWidth / 2;
       });
 
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(frame);
     }
+  }
+
+  function initTabs() {
+    document.querySelectorAll('[data-tabs]').forEach((tabsRoot) => {
+      if (tabsRoot.dataset.tabsInit === '1') return;
+      tabsRoot.dataset.tabsInit = '1';
+
+      const tabButtons = Array.from(tabsRoot.querySelectorAll('[role="tab"]'));
+      const panels = Array.from(tabsRoot.querySelectorAll('[role="tabpanel"]'));
+      if (!tabButtons.length || !panels.length) return;
+
+      function activateTab(btn, setFocus = true) {
+        const targetId = btn.getAttribute('aria-controls');
+        tabButtons.forEach(b => {
+          const selected = b === btn;
+          b.setAttribute('aria-selected', String(selected));
+          b.classList.toggle('active', selected);
+          b.tabIndex = selected ? 0 : -1;
+        });
+        panels.forEach(p => {
+          const show = p.id === targetId;
+          if (show) {
+            p.removeAttribute('hidden');
+          } else {
+            p.setAttribute('hidden', '');
+          }
+        });
+        if (setFocus) btn.focus();
+      }
+
+      // Initialize: find already visible panel else first
+      let initialBtn = tabButtons.find(b => {
+        const panel = document.getElementById(b.getAttribute('aria-controls'));
+        return panel && !panel.hasAttribute('hidden');
+      }) || tabButtons[0];
+      activateTab(initialBtn, false);
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          activateTab(btn);
+        });
+        btn.addEventListener('keydown', (e) => {
+          const i = tabButtons.indexOf(btn);
+          let newIndex = i;
+          switch (e.key) {
+            case 'ArrowRight':
+            case 'Right':
+              newIndex = (i + 1) % tabButtons.length; break;
+            case 'ArrowLeft':
+            case 'Left':
+              newIndex = (i - 1 + tabButtons.length) % tabButtons.length; break;
+            case 'Home': newIndex = 0; break;
+            case 'End': newIndex = tabButtons.length - 1; break;
+            default: return;
+          }
+          e.preventDefault();
+          activateTab(tabButtons[newIndex]);
+        });
+      });
+    });
   }
 })();
 

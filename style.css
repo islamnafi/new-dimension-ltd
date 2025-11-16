@@ -99,14 +99,47 @@ button, input, select, textarea {
 .section {
   padding: 72px 0;
 }
+/* Reduce gap specifically between tight marquee section and following about spotlight */
+.section--tight + .about-spotlight {
+  padding-top: 36px; /* was 72px; moderate reduction */
+}
 
 /* Utility: reduced vertical spacing for compact sections (used for clients marquee) */
 .section--tight {
   padding: 28px 0;
 }
 
+/* Medium compact section variant (e.g., Managing Director message) */
+.section--compact {
+  padding: 40px 0; /* reduce from 72px default */
+}
+
+/* Even tighter option if stacked densely (not used yet) */
+.section--compact.section--tight { padding: 28px 0; }
+
+/* Managing Director message specific tweaks */
+.md-message .big-quote {
+  padding: 20px 28px; /* was 34px 42px */
+}
+
 .section.alt {
   background: var(--color-bg-alt);
+}
+
+/* Reusable gradient section (matches Final CTA gradient) */
+.gradient-header {
+  background: linear-gradient(135deg, #0A2342, #2C67B3);
+  color: #fff;
+}
+.section.alt.gradient-header {
+  background: linear-gradient(135deg, #0A2342, #2C67B3); /* ensure override of .section.alt */
+  color: #fff;
+}
+.gradient-header .section-title {
+  color: #fff;
+}
+.gradient-header .section-subtitle {
+  color: rgba(255,255,255,0.85);
 }
 
 .section-title {
@@ -619,20 +652,22 @@ textarea {
 }
 
 /* Marquee */
+/* Marquee (client logos) */
 .marquee {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(10,35,66,0.08);
-  background: #fff;
+  /* Remove white box */
+  background: transparent;
+  border: none;
 }
 
 .marquee-track {
   display: inline-flex;
-  gap: 32px;
+  gap: 48px; /* more breathing room between logos */
   white-space: nowrap;
   will-change: transform;
-  padding: 14px 20px;
+  padding: 8px 0; /* remove inner white padding */
   color: var(--color-primary);
   font-weight: 600;
 }
@@ -642,10 +677,13 @@ textarea {
   align-items: center;
 }
 .client-logos img {
-  height: clamp(40px, 6vw, 80px);
+  height: clamp(70px, 10vw, 110px); /* enlarged logo size */
   width: auto;
+  object-fit: contain;
+  background: transparent; /* ensure no white background */
   filter: none;
   opacity: 1;
+  flex: 0 0 auto;
 }
 
 /* Tabs / Accordions (Projects) */
@@ -691,6 +729,59 @@ textarea {
 }
 
 .list li { margin: 8px 0; }
+
+/* Contracts layout */
+.contracts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.contract-card {
+  background: #fff;
+  border: 1px solid rgba(10,35,66,0.1);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.contract-card h4 {
+  margin: 0 0 10px;
+  color: var(--color-primary);
+  font-size: 18px;
+}
+
+.contract-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.tag--id {
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+  background: rgba(44,103,179,0.06);
+}
+
+.tag--client {
+  border: 1px solid rgba(217,164,4,0.6);
+  color: #7b5a00;
+  background: rgba(217,164,4,0.12);
+}
+
+.contract-desc { margin: 0; color: var(--color-muted-text); }
 
 /* Forms */
 form .field {
