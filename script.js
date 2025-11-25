@@ -9,6 +9,8 @@
     initSlideshows();
     initMarquees();
     initTabs();
+    initFormValidation();
+    initBackToTop();
   });
 
   function initNavToggle() {
@@ -19,7 +21,7 @@
     btn.addEventListener('click', () => {
       const open = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', String(!open));
-      nav.classList.toggle('is-open', !open);
+      nav.classList.toggle('open', !open);
     });
   }
 
@@ -210,6 +212,95 @@
           e.preventDefault();
           activateTab(tabButtons[newIndex]);
         });
+      });
+    });
+  }
+  
+  function initFormValidation() {
+    document.querySelectorAll('[data-validate]').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        let isValid = true;
+        const requiredFields = form.querySelectorAll('[data-required]');
+        
+        requiredFields.forEach((field) => {
+          const value = field.value.trim();
+          const fieldWrapper = field.closest('.field');
+          
+          // Remove existing error
+          const existingError = fieldWrapper?.querySelector('.field-error');
+          if (existingError) existingError.remove();
+          field.classList.remove('error');
+          
+          // Validate
+          if (!value) {
+            isValid = false;
+            field.classList.add('error');
+            if (fieldWrapper) {
+              const error = document.createElement('span');
+              error.className = 'field-error';
+              error.textContent = 'This field is required';
+              error.setAttribute('role', 'alert');
+              fieldWrapper.appendChild(error);
+            }
+          } else if (field.type === 'email' && !isValidEmail(value)) {
+            isValid = false;
+            field.classList.add('error');
+            if (fieldWrapper) {
+              const error = document.createElement('span');
+              error.className = 'field-error';
+              error.textContent = 'Please enter a valid email address';
+              error.setAttribute('role', 'alert');
+              fieldWrapper.appendChild(error);
+            }
+          }
+        });
+        
+        if (isValid) {
+          // Show success message
+          const success = document.createElement('div');
+          success.className = 'form-success';
+          success.innerHTML = '<strong>Thank you!</strong> Your message has been received. We\'ll get back to you soon.';
+          success.setAttribute('role', 'alert');
+          form.insertAdjacentElement('beforebegin', success);
+          
+          // Reset form
+          form.reset();
+          
+          // Remove success message after 5 seconds
+          setTimeout(() => success.remove(), 5000);
+        } else {
+          // Focus first error field
+          const firstError = form.querySelector('.error');
+          if (firstError) firstError.focus();
+        }
+      });
+    });
+  }
+  
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  
+  function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+    
+    // Scroll to top when clicked
+    btn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
     });
   }

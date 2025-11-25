@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A2342">
   <title>New Dimension | Our Project Portfolio</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <meta name="description" content="Proven track record executing and managing contracts for key government and commercial clients.">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
@@ -45,13 +47,13 @@
       <div class="container">
         <div class="tabs" data-tabs>
           <div class="tab-list" role="tablist" aria-label="Project categories">
-            <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-ongoing" id="tab-ongoing">Ongoing Contracts</button>
-            <button class="tab-button" role="tab" aria-selected="true" aria-controls="panel-completed" id="tab-completed">Completed Contracts</button>
+            <button class="tab-button" role="tab" aria-selected="true" aria-controls="panel-ongoing" id="tab-ongoing">Ongoing Contracts</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-completed" id="tab-completed">Completed Contracts</button>
             <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-future" id="tab-future">Future Contracts</button>
           </div>
 
           <div class="tab-panels">
-            <section class="tab-panel" role="tabpanel" id="panel-ongoing" aria-labelledby="tab-ongoing" tabindex="0" hidden>
+            <section class="tab-panel" role="tabpanel" id="panel-ongoing" aria-labelledby="tab-ongoing" tabindex="0">
               <div class="contracts-grid">
                 <article class="contract-card">
                   <h4>Establishment of Digital Chrome Plating Plant</h4>
@@ -96,7 +98,7 @@
               </div>
             </section>
 
-            <section class="tab-panel" role="tabpanel" id="panel-completed" aria-labelledby="tab-completed" tabindex="0">
+            <section class="tab-panel" role="tabpanel" id="panel-completed" aria-labelledby="tab-completed" tabindex="0" hidden>
   <div class="contracts-grid">
 
     <!-- PWD-01 -->
@@ -234,7 +236,7 @@
     <div class="container footer-top">
       <div class="footer-grid">
         <div>
-          <div class="footer-logo" aria-hidden="true">ND</div>
+          <div class="footer-logo" aria-label="New Dimension" aria-hidden="true">ND</div>
           <div class="spacer-sm"></div>
           <p>Your Trusted Partner in Strategic Procurement &amp; Supply.</p>
         </div>
@@ -250,13 +252,15 @@
           <strong>Contact</strong>
           <div class="spacer-xs"></div>
           <p style="margin:0 0 6px">Office: 17 (1st Floor), 67, Mannan Tower, MatikataBazar, Dhaka Cantonment, Dhaka-1206.</p>
-          <p style="margin:0 0 6px">Phone: 01748455080</p>
-          <p style="margin:0">Email: <a href="mailto:Newdimesion6@gmail.com">Newdimesion6@gmail.com</a></p>
+          <p style="margin:0 0 6px">Phone: <a href="tel:+8801748455080">01748455080</a></p>
+          <p style="margin:0">Email: <a href="mailto:newdimension6@gmail.com">newdimension6@gmail.com</a></p>
         </div>
       </div>
     </div>
     <div class="subfooter">© 2025 New Dimension. All Rights Reserved.</div>
   </footer>
+
+  <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
 
 </body>
 </html>

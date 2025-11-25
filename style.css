@@ -6,7 +6,7 @@
   --color-secondary: #2C67B3;
   --color-accent: #D9A404;
   --color-text: #0a0a0a;
-  --color-muted-text: #444;
+  --color-muted-text: #555;
   --color-bg: #ffffff;
   --color-bg-alt: #f6f7f9;
   --radius-sm: 6px;
@@ -32,15 +32,18 @@ html, body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
   font-family: var(--font-base);
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.7;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  color: var(--color-text);
 }
 
 /* Ensure headings use the same system font */
@@ -64,10 +67,47 @@ img {
 a {
   color: inherit;
   text-decoration: none;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+p a,
+li a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+p a:hover,
+li a:hover {
+  color: var(--color-primary);
+  text-decoration-thickness: 2px;
 }
 
 button, input, select, textarea {
   font: inherit;
+}
+
+/* Skip to content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent);
+  color: #0a0a0a;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 9999;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* Utilities */
@@ -101,12 +141,12 @@ button, input, select, textarea {
 }
 /* Reduce gap specifically between tight marquee section and following about spotlight */
 .section--tight + .about-spotlight {
-  padding-top: 36px; /* was 72px; moderate reduction */
+  padding-top: 36px;
 }
 
 /* Utility: reduced vertical spacing for compact sections (used for clients marquee) */
 .section--tight {
-  padding: 28px 0;
+  padding: 36px 0;
 }
 
 /* Medium compact section variant (e.g., Managing Director message) */
@@ -156,6 +196,8 @@ button, input, select, textarea {
 .btn {
   display: inline-block;
   padding: 12px 18px;
+  min-height: 44px;
+  min-width: 44px;
   border-radius: var(--radius-sm);
   border: none;
   background: var(--color-secondary);
@@ -257,7 +299,7 @@ button, input, select, textarea {
   align-items: flex-start;
   gap: 0;
   font-size: clamp(13px, 1.2vw, 16px);
-  font-weight: 300; /* lighter weight as requested */
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #0A2342;
@@ -298,6 +340,17 @@ button, input, select, textarea {
   border: 1px solid rgba(10,35,66,0.12);
   background: #fff;
   color: var(--color-primary);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.hamburger:hover {
+  background: var(--color-bg-alt);
+}
+
+.hamburger:active {
+  transform: scale(0.95);
 }
 
 /* Mobile Nav */
@@ -320,8 +373,7 @@ button, input, select, textarea {
 
 /* Hero */
 .hero {
-  /* Reduced vertical padding by ~40% to tighten space under the header */
-  padding: 38px 0 28px;
+  padding: 60px 0 48px;
 }
 
 .hero .headline {
@@ -427,7 +479,7 @@ button, input, select, textarea {
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 18px;
   font-size: 14px;
   text-transform: uppercase;
@@ -445,6 +497,14 @@ button, input, select, textarea {
   margin: 6px 0 0;
   font-size: 12px;
   opacity: 0.72;
+}
+
+@media (max-width: 480px) {
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
 }
 
 .hero-card {
@@ -515,6 +575,18 @@ button, input, select, textarea {
 @media (max-width: 640px) {
   .grid-3 { grid-template-columns: 1fr; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
+  
+  .section {
+    padding: 48px 0;
+  }
+  
+  .section--tight {
+    padding: 24px 0;
+  }
+  
+  .section--compact {
+    padding: 32px 0;
+  }
 }
 
 /* Cards */
@@ -524,6 +596,12 @@ button, input, select, textarea {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   padding: 18px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .card h4 { margin: 8px 0 4px; color: var(--color-primary); }
@@ -664,10 +742,10 @@ textarea {
 
 .marquee-track {
   display: inline-flex;
-  gap: 48px; /* more breathing room between logos */
+  gap: 32px;
   white-space: nowrap;
   will-change: transform;
-  padding: 8px 0; /* remove inner white padding */
+  padding: 8px 0;
   color: var(--color-primary);
   font-weight: 600;
 }
@@ -677,13 +755,18 @@ textarea {
   align-items: center;
 }
 .client-logos img {
-  height: clamp(70px, 10vw, 110px); /* enlarged logo size */
+  height: clamp(60px, 8vw, 90px);
   width: auto;
   object-fit: contain;
-  background: transparent; /* ensure no white background */
+  background: transparent;
   filter: none;
-  opacity: 1;
+  opacity: 0.85;
   flex: 0 0 auto;
+  transition: opacity var(--transition-fast);
+}
+
+.client-logos img:hover {
+  opacity: 1;
 }
 
 /* Tabs / Accordions (Projects) */
@@ -792,20 +875,83 @@ form .field {
 
 label { font-weight: 600; color: var(--color-primary); }
 
+label span[aria-label="required"] {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
 input[type="text"], input[type="email"], textarea {
   width: 100%;
   padding: 12px 12px;
   border-radius: 10px;
   border: 1px solid rgba(10,35,66,0.18);
   background: #fff;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(44,103,179,0.1);
 }
 
 textarea { min-height: 120px; resize: vertical; }
+
+input.error,
+textarea.error {
+  border-color: #dc3545;
+  background: #fff5f5;
+}
+
+.field-error {
+  display: block;
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.form-success {
+  padding: 16px 20px;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: var(--radius-md);
+  color: #155724;
+  margin-bottom: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+.form-success strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Footer */
 .site-footer {
   background: #071a32;
   color: #e6edf7;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--color-accent);
 }
 
 .footer-top {
@@ -833,14 +979,28 @@ textarea { min-height: 120px; resize: vertical; }
   display: inline-block;
   color: #c8d5ea;
   margin: 6px 0;
+  text-decoration: none;
 }
 
-.footer-links a:hover { color: #fff; }
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
 
 .social-links {
   display: flex;
   align-items: center;
   gap: 0;
+}
+
+.social-links a {
+  display: inline-block;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.social-links a:hover {
+  transform: translateY(-2px);
+  opacity: 0.8;
 }
 
 .subfooter {
@@ -850,10 +1010,68 @@ textarea { min-height: 120px; resize: vertical; }
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .footer-top {
+    padding: 32px 0 24px;
+  }
+}
+
 /* Focus states for accessibility */
 :focus-visible {
   outline: 3px solid rgba(217,164,4,0.65);
   outline-offset: 2px;
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10,35,66,0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100px);
+  transition: opacity var(--transition-med), visibility var(--transition-med), transform var(--transition-med), background var(--transition-fast);
+  z-index: 999;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(10,35,66,0.4);
+}
+
+.back-to-top:active {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
 }
 
 /* Map */
@@ -1218,6 +1436,34 @@ textarea { min-height: 120px; resize: vertical; }
 }
 /* If a blob/gradient class still exists somewhere, keep it hidden */
 .about-spotlight__media .blob { display: none !important; }
+
+/* Managing Director Portrait */
+.md-portrait {
+  margin: 0;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+}
+
+.md-portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.md-portrait figcaption {
+  margin-top: 12px;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .md-portrait {
+    max-width: 240px;
+    margin: 24px auto 0;
+  }
+}
 
 /* Large decorative quotation marks (realigned) */
 .big-quote {
