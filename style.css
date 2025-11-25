@@ -837,6 +837,12 @@ textarea { min-height: 120px; resize: vertical; }
 
 .footer-links a:hover { color: #fff; }
 
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 .subfooter {
   border-top: 1px solid rgba(255,255,255,0.1);
   padding: 12px 0;
