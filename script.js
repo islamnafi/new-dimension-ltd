@@ -18,11 +18,66 @@
     const nav = document.querySelector('[data-nav]');
     if (!btn || !nav) return;
 
+    const navLinks = Array.from(nav.querySelectorAll('a'));
+    const mq = window.matchMedia('(min-width: 901px)');
+
+    btn.setAttribute('aria-expanded', 'false');
+
+    const closeNav = () => {
+      if (!nav.classList.contains('open')) return;
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+    };
+
+    const openNav = () => {
+      if (nav.classList.contains('open')) return;
+      nav.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('nav-open');
+    };
+
     btn.addEventListener('click', () => {
-      const open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      nav.classList.toggle('open', !open);
+      if (nav.classList.contains('open')) {
+        closeNav();
+      } else {
+        openNav();
+      }
     });
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        closeNav();
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!nav.classList.contains('open')) return;
+      if (event.target === btn || btn.contains(event.target)) return;
+      if (nav.contains(event.target)) return;
+      closeNav();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.classList.contains('open')) {
+        closeNav();
+        btn.focus();
+      }
+    });
+
+    const handleMediaChange = (event) => {
+      if (event.matches) {
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+      }
+    };
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', handleMediaChange);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(handleMediaChange);
+    }
   }
 
   function initSlideshows() {
