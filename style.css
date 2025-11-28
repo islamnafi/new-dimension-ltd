@@ -457,8 +457,14 @@ button, input, select, textarea {
     box-shadow: 0 12px 24px rgba(10,35,66,0.15);
     z-index: 950;
     border-radius: 0 0 16px 16px;
+    pointer-events: none;
+    visibility: hidden;
   }
-  .nav-links.open { transform: translateY(0); }
+  .nav-links.open { 
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+  }
   .nav-links a {
     width: 100%;
     text-align: left;
@@ -473,10 +479,15 @@ button, input, select, textarea {
     place-items: center;
     min-width: 44px;
     min-height: 44px;
+    margin-right: 8px;
   }
   
   .navbar {
     padding: 8px 0;
+  }
+  
+  .navbar .brand {
+    padding-left: 8px;
   }
 }
 
