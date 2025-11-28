@@ -23,11 +23,20 @@
 /* Reset & Base */
 * {
   box-sizing: border-box;
-}
-
-html, body {
   margin: 0;
   padding: 0;
+}
+
+html {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 html {
@@ -315,10 +324,14 @@ button, input, select, textarea {
 .site-header {
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   background: #ffffff;
   backdrop-filter: saturate(140%) blur(8px);
   box-shadow: 0 1px 0 rgba(10,35,66,0.08);
+  margin: 0;
+  padding: 0;
 }
 
 @media (max-width: 900px) {
@@ -333,6 +346,8 @@ button, input, select, textarea {
   align-items: center;
   justify-content: space-between;
   min-height: 76px;
+  margin: 0;
+  padding: 0;
 }
 
 .brand {
@@ -2012,6 +2027,8 @@ textarea.error {
   
   .products-section .section-title {
     order: 1;
+    grid-column: auto;
+    grid-row: auto;
   }
   
   .products-section .slideshow {
@@ -2020,6 +2037,13 @@ textarea.error {
   
   .products-section .products-text {
     order: 3;
+  }
+  
+  .products-section .btn {
+    padding: 14px 24px;
+    min-height: 48px;
+    width: 100%;
+    margin-top: 12px;
   }
 }
 
