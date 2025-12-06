@@ -270,6 +270,8 @@ button, input, select, textarea {
 }
 
 .btn {
+  --btn-border-color: rgba(255,255,255,0.65);
+  --btn-text-color: #fff;
   display: inline-block;
   padding: 14px 24px;
   min-height: 48px;
@@ -277,9 +279,11 @@ button, input, select, textarea {
   border-radius: var(--radius-sm);
   border: none;
   background: var(--color-secondary);
-  color: #fff;
+  color: var(--btn-text-color);
   cursor: pointer;
-  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  isolation: isolate;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   box-shadow: var(--shadow-sm);
   font-family: var(--font-base);
   font-weight: 600;
@@ -287,15 +291,46 @@ button, input, select, textarea {
   text-align: center;
 }
 
-.btn:hover, .btn:focus {
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid var(--btn-border-color);
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+  transition: transform var(--transition-med), opacity var(--transition-fast);
+}
+
+.btn:hover,
+.btn:focus {
   background: #255a9a;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  color: var(--btn-text-color);
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn::after {
+    transition: none;
+  }
 }
 
 .btn.accent {
   background: var(--color-accent);
-  color: #0a0a0a;
+  --btn-text-color: #0a0a0a;
+  --btn-border-color: rgba(217,164,4,0.55);
 }
 
 .text-center { text-align: center; }
@@ -646,8 +681,10 @@ button, input, select, textarea {
 .btn.ghost {
   /* Default ghost style for light backgrounds */
   border: 1px solid rgba(10,35,66,0.12);
-  color: var(--color-primary);
+  --btn-text-color: var(--color-primary);
+  color: var(--btn-text-color);
   background: transparent;
+  --btn-border-color: rgba(10,35,66,0.28);
 }
 
 .btn.ghost:hover {
@@ -658,8 +695,10 @@ button, input, select, textarea {
 /* Inverse ghost style when used on dark hero background */
 .hero .btn.ghost {
   border: 1px solid rgba(255,255,255,0.35);
-  color: #fff;
+  --btn-text-color: #fff;
+  color: var(--btn-text-color);
   background: transparent;
+  --btn-border-color: rgba(255,255,255,0.45);
 }
 
 .hero .btn.ghost:hover {
