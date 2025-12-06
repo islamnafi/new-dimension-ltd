@@ -175,6 +175,12 @@ button, input, select, textarea {
   }
 }
 
+@media (min-width: 1400px) {
+  .container {
+    padding-inline: 80px;
+  }
+}
+
 @media (max-width: 640px) {
   .container {
     padding-inline: 16px;
@@ -348,10 +354,11 @@ button, input, select, textarea {
   }
 }
 
-/* Desktop: ensure header has left padding */
+/* Desktop: header uses same padding as rest of site for alignment */
 @media (min-width: 901px) {
   .site-header .container {
-    padding-inline: clamp(120px, 10vw, 160px);
+    max-width: var(--container-max);
+    /* Explicitly inherit container padding - no override */
   }
 }
 
@@ -361,7 +368,15 @@ button, input, select, textarea {
   justify-content: space-between;
   min-height: 76px;
   margin: 0;
-  padding: 0;
+  width: 100%;
+  /* No padding - inherits from .container parent */
+}
+
+/* Desktop: ensure proper flex behavior */
+@media (min-width: 901px) {
+  .navbar {
+    gap: 24px;
+  }
 }
 
 .brand {
@@ -370,6 +385,7 @@ button, input, select, textarea {
   gap: 12px;
   font-weight: 700;
   color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .brand .logo {
@@ -411,6 +427,13 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 18px;
+}
+
+/* Desktop: adjust nav spacing */
+@media (min-width: 901px) {
+  .nav-links {
+    gap: clamp(12px, 1.5vw, 24px);
+  }
 }
 
 .nav-links a {
@@ -497,7 +520,8 @@ button, input, select, textarea {
   }
   
   .navbar {
-    padding: 8px 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   
   .navbar .brand {
