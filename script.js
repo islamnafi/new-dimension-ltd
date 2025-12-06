@@ -11,6 +11,8 @@
     initTabs();
     initFormValidation();
     initBackToTop();
+    initCounters();
+    initRotatingBadges();
   });
 
   function initNavToggle() {
@@ -357,6 +359,187 @@
         top: 0,
         behavior: 'smooth'
       });
+    });
+  }
+
+  // Animate stat counters when they enter view, respecting reduced-motion preferences.
+  function initCounters() {
+    const counters = document.querySelectorAll('[data-counter-target]');
+    if (!counters.length) return;
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const formatValue = (value, decimals) => {
+      if (!Number.isFinite(value)) return '0';
+      return decimals > 0 ? value.toFixed(decimals) : Math.floor(value).toString();
+    };
+
+    const runAnimation = (el) => {
+      const target = Number(el.dataset.counterTarget);
+      if (!Number.isFinite(target)) return;
+
+      const duration = Number(el.dataset.counterDuration || 1600);
+      const decimals = Number(el.dataset.counterDecimals || 0);
+      const prefix = el.dataset.counterPrefix || '';
+      const suffix = el.dataset.counterSuffix || '';
+      const finalText = el.dataset.counterFinal;
+      const startValue = Number(el.dataset.counterStart || 0);
+
+      if (motionQuery.matches) {
+        el.textContent = finalText ?? `${prefix}${formatValue(target, decimals)}${suffix}`;
+        el.dataset.counterAnimated = '1';
+        return;
+      }
+
+      const startTime = performance.now();
+
+      const step = (now) => {
+        const progress = Math.min(1, (now - startTime) / duration);
+        const current = startValue + (target - startValue) * progress;
+
+        if (progress >= 1) {
+          el.textContent = finalText ?? `${prefix}${formatValue(target, decimals)}${suffix}`;
+          el.dataset.counterAnimated = '1';
+          return;
+        }
+
+        el.textContent = `${prefix}${formatValue(current, decimals)}${suffix}`;
+        requestAnimationFrame(step);
+      };
+
+      requestAnimationFrame(step);
+    };
+
+    const observer = typeof window !== 'undefined' && typeof window.IntersectionObserver === 'function'
+      ? new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            observer.unobserve(el);
+            runAnimation(el);
+          });
+        }, { threshold: 0.35 })
+      : null;
+
+    counters.forEach((el) => {
+      if (el.dataset.counterAnimated === '1') return;
+
+      const decimals = Number(el.dataset.counterDecimals || 0);
+      const prefix = el.dataset.counterPrefix || '';
+      const suffix = el.dataset.counterSuffix || '';
+      const startValue = Number(el.dataset.counterStart || 0);
+
+      if (motionQuery.matches) {
+        const target = Number(el.dataset.counterTarget);
+        const finalText = el.dataset.counterFinal;
+        el.textContent = finalText ?? `${prefix}${formatValue(target, decimals)}${suffix}`;
+        el.dataset.counterAnimated = '1';
+        return;
+      }
+
+      el.textContent = `${prefix}${formatValue(startValue, decimals)}${suffix}`;
+
+      if (observer) {
+        observer.observe(el);
+      } else {
+        runAnimation(el);
+      }
+    });
+
+    const handleMotionChange = () => {
+      counters.forEach((el) => {
+        if (el.dataset.counterAnimated === '1') return;
+        if (observer) observer.unobserve(el);
+        const target = Number(el.dataset.counterTarget);
+        const decimals = Number(el.dataset.counterDecimals || 0);
+        const prefix = el.dataset.counterPrefix || '';
+        const suffix = el.dataset.counterSuffix || '';
+        const finalText = el.dataset.counterFinal ?? `${prefix}${formatValue(target, decimals)}${suffix}`;
+        el.textContent = finalText;
+        el.dataset.counterAnimated = '1';
+      });
+    };
+
+    if (typeof motionQuery.addEventListener === 'function') {
+      motionQuery.addEventListener('change', handleMotionChange);
+    } else if (typeof motionQuery.addListener === 'function') {
+      motionQuery.addListener(handleMotionChange);
+    }
+  }
+
+  function initRotatingBadges() {
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    document.querySelectorAll('[data-rotating-badge]').forEach((badge) => {
+      if (badge.dataset.rotatorInit === '1') return;
+      badge.dataset.rotatorInit = '1';
+
+      const phrases = (badge.getAttribute('data-phrases') || '')
+        .split('|')
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      if (!phrases.length) return;
+
+      const textEl = badge.querySelector('[data-rotating-text]') || badge;
+      let index = 0;
+      textEl.textContent = phrases[index];
+
+      if (phrases.length === 1) return;
+
+      const intervalMs = parseInt(badge.getAttribute('data-interval') || '4000', 10);
+      const transitionMs = parseInt(badge.getAttribute('data-transition') || '260', 10);
+      let timerId = null;
+
+      const scheduleNext = () => {
+        window.clearTimeout(timerId);
+        timerId = window.setTimeout(tick, intervalMs);
+      };
+
+      const tick = () => {
+        if (phrases.length < 2) return;
+
+        if (motionQuery.matches) {
+          index = (index + 1) % phrases.length;
+          textEl.textContent = phrases[index];
+          scheduleNext();
+          return;
+        }
+
+        textEl.classList.add('is-fading-out');
+
+        window.setTimeout(() => {
+          textEl.classList.remove('is-fading-out');
+          textEl.classList.add('is-preparing');
+          index = (index + 1) % phrases.length;
+          textEl.textContent = phrases[index];
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              textEl.classList.remove('is-preparing');
+            });
+          });
+        }, transitionMs);
+
+        scheduleNext();
+      };
+
+      const start = () => {
+        scheduleNext();
+      };
+
+      start();
+
+      const handleMotionChange = () => {
+        window.clearTimeout(timerId);
+        start();
+      };
+
+      if (typeof motionQuery.addEventListener === 'function') {
+        motionQuery.addEventListener('change', handleMotionChange);
+      } else if (typeof motionQuery.addListener === 'function') {
+        motionQuery.addListener(handleMotionChange);
+      }
     });
   }
 })();

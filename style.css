@@ -610,6 +610,30 @@ button, input, select, textarea {
   background: rgba(217,164,4,0.16);
   color: #ffd56a;
   margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-badge__text {
+  display: inline-block;
+  transition: opacity 240ms ease, transform 240ms ease;
+  will-change: opacity, transform;
+}
+
+.hero-badge__text.is-fading-out {
+  opacity: 0;
+  transform: translateY(-35%);
+}
+
+.hero-badge__text.is-preparing {
+  opacity: 0;
+  transform: translateY(35%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-badge__text {
+    transition: none;
+  }
 }
 
 .hero-actions {
